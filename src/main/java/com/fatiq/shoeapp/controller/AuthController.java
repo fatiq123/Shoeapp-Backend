@@ -1,12 +1,11 @@
 package com.fatiq.shoeapp.controller;
 
-import com.fatiq.shoeapp.dto.JwtResponse;
-import com.fatiq.shoeapp.dto.LoginRequest;
-import com.fatiq.shoeapp.dto.RegisterRequest;
-import com.fatiq.shoeapp.dto.UserDto;
+import com.fatiq.shoeapp.dto.*;
 import com.fatiq.shoeapp.service.AuthService;
 import com.fatiq.shoeapp.service.UserService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class AuthController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
     @Autowired
     private AuthService authService;
 
@@ -27,15 +28,17 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> register(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<ApiResponse<UserDto>> register(@Valid @RequestBody RegisterRequest registerRequest) {
+        logger.info("Register request received for username: {}", registerRequest.getUsername());
         UserDto userDto = userService.registerUser(registerRequest);
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(ApiResponse.success(userDto, "User registered successfully"));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<ApiResponse<JwtResponse>> login(@Valid @RequestBody LoginRequest loginRequest) {
+        logger.info("Login request received for username: {}", loginRequest.getUsername());
         JwtResponse response = authService.login(loginRequest);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response, "Login successful"));
     }
 
 }

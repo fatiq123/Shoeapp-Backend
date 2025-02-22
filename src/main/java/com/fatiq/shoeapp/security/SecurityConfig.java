@@ -34,6 +34,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/shoes/**").permitAll() // Public access for demonstration
+                        .requestMatchers("/api/brands/**", "/api/categories/**").hasRole("ADMIN") // Admin only
+                        .requestMatchers("/api/orders/**", "/api/users/me").hasRole("USER") // User only
+                        .requestMatchers("/api/users/**").hasRole("ADMIN") // New endpoint
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

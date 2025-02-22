@@ -1,7 +1,6 @@
 package com.fatiq.shoeapp.exception;
 
 import com.fatiq.shoeapp.dto.ApiResponse;
-import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
